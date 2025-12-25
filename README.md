@@ -60,3 +60,7 @@ Gold (Star Schema) → Aggregated, analytics-ready datasets.
 ✅ Self-service BI with Power BI
 
 ✅ GitHub integration for CI/CD
+
+HiGH LEVEL DESIGN
+
+![screenshot](https://github.com/Sharmaaditya22/Azure-Netflix-Project/blob/10dc5a00ee7d7a5261c23916bada5791e37491eb/Azure_Netflix_project_flow.png)
