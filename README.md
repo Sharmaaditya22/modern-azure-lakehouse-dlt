@@ -14,7 +14,6 @@ The system ingests a comprehensive **Netflix Dataset** to simulate a real-world 
 
 ## 🏗️ High-Level Design (Architecture)
 
-*(Please refer to the architecture diagram included in the repository for a visual representation of the data flow.)*
 ![High level diagram](https://github.com/Sharmaaditya22/modern-azure-lakehouse-dlt/blob/0c59aecaca9dcd9bdaf4cff3c2cd85785df5c915/Images/Azure_Netflix_project_flow.png)
 
 The solution follows the **Lakehouse** paradigm, combining the low-cost storage of a Data Lake with the transactional integrity (ACID) of a Data Warehouse. The data flows through the following stages:
