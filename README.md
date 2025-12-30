@@ -1,4 +1,4 @@
-# Azure-Netflix-Project
+# Modern Azure Data Lakehouse with Delta Live Tables
 Overview
 
 This project demonstrates a modern Data Lakehouse architecture built on Azure + Databricks, leveraging Delta Live Tables (DLT) for real-time and incremental data processing.
