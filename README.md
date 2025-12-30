@@ -1,66 +1,86 @@
-# Modern Azure Data Lakehouse with Delta Live Tables
-Overview
+# 🚀 Modern Azure Data Lakehouse with Delta Live Tables (DLT)
 
-This project demonstrates a modern Data Lakehouse architecture built on Azure + Databricks, leveraging Delta Live Tables (DLT) for real-time and incremental data processing.
+![Azure](https://img.shields.io/badge/Azure-0078D4?style=for-the-badge&logo=microsoftazure&logoColor=white)
+![Databricks](https://img.shields.io/badge/Databricks-FF3621?style=for-the-badge&logo=databricks&logoColor=white)
+![Delta Lake](https://img.shields.io/badge/Delta_Lake-D45500?style=for-the-badge&logo=deltalake&logoColor=white)
+![Synapse](https://img.shields.io/badge/Synapse%20Analytics-0078D4?style=for-the-badge&logo=microsoftazure&logoColor=white)
 
-The architecture ingests data from multiple sources, processes it through a medallion architecture (Bronze → Silver → Gold), and makes it available for analytics and reporting via Azure Synapse Analytics and Power BI.
+## 📖 Overview
+This project demonstrates an enterprise-grade **Data Lakehouse architecture** built on **Azure** and **Databricks**. It leverages **Delta Live Tables (DLT)** to replace traditional orchestration with a declarative, quality-enforced pipeline.
 
-🏗️ Architecture
+The system ingests a comprehensive **Netflix Dataset** to simulate a real-world digital media analytics platform. It processes raw entertainment data through a **Medallion Architecture** (Bronze → Silver → Gold) to generate insights on content trends, regional availability, and user engagement.
 
-🔑 Key Components
+---
 
-Data Sources:
+## 🏗️ High-Level Design (Architecture)
 
-Files, APIs, and streaming data
+*(Please refer to the architecture diagram included in the repository for a visual representation of the data flow.)*
 
-GitHub integration for CI/CD and pipeline orchestration
+The solution follows the **Lakehouse** paradigm, combining the low-cost storage of a Data Lake with the transactional integrity (ACID) of a Data Warehouse. The data flows through the following stages:
 
-Ingestion (Bronze Layer)
+1. **Ingestion:** Raw Netflix data (CSV/JSON) is ingested from external sources into **Azure Data Lake Storage (ADLS) Gen2**.
+2. **Bronze Layer (Raw):** **Autoloader** incrementally detects new files and loads them into the raw Delta tables.
+3. **Silver Layer (Transformation):** **Delta Live Tables (DLT)** perform cleaning, deduplication, and schema enforcement to create high-quality curated tables.
+4. **Gold Layer (Aggregated):** Business logic is applied to create fact and dimension tables (Star Schema) optimized for reporting.
+5. **Serving & Reporting:** **Azure Synapse Analytics** (Serverless) allows for SQL-based querying, while **Power BI** visualizes the insights.
 
-Azure Data Factory (ADF) orchestrates batch and streaming data ingestion.
+---
 
-Data lands in Azure Data Lake Storage Gen2 as raw incremental data.
+## 📊 Dataset (Netflix Data)
+This project uses a rich dataset representing a global streaming catalog. The data is located in the `data/` directory and includes:
+* **Titles:** Metadata for movies and TV shows (Director, Cast, Country, Rating).
+* **Credits:** Detailed cast and crew information.
+* **User Metrics:** Simulated viewership and rating data.
 
-Transformation (Silver Layer)
+*Note: This data is used to demonstrate complex transformations, such as handling nested JSON structures (e.g., separating multiple actors from a single column) and analyzing content distribution strategies.*
 
-Databricks Delta Live Tables (DLT) handle transformations (cleaning, joins, enrichment).
+---
 
-Data is stored in curated Silver tables for downstream use.
+## 🔑 Key Components
 
-Star Schema (Gold Layer)
+### 1. Ingestion Layer (Bronze)
+* **Tool:** Azure Data Factory (ADF) & Databricks Autoloader.
+* **Process:** ADF triggers the movement of Netflix CSV/JSON files into ADLS Gen2. Autoloader incrementally detects new files and loads them into the **Bronze** layer.
 
-Business-ready fact and dimension tables are built in the Gold layer.
+### 2. Transformation Layer (Silver)
+* **Tool:** **Delta Live Tables (DLT)**.
+* **Logic:**
+    * **Cleaning:** Removes duplicates and handles null values in critical fields like `Director` or `Cast`.
+    * **Enrichment:** Unflattens complex strings (e.g., separating "Tom Hanks, Tim Allen" into distinct rows) for granular analysis.
+    * **Quality Checks:** Enforces schema validation using DLT constraints.
 
-Optimized for analytics and reporting.
+### 3. Analytics Layer (Gold & Serving)
+* **Tool:** Databricks SQL & Synapse Analytics.
+* **Output:** Creates business-ready aggregates, such as "Top 10 Genres by Region" or "Content Growth over Years."
 
-Warehouse & Reporting
+---
 
-Data flows into Azure Synapse Analytics for enterprise-scale queries.
+## 📂 Repository Structure
 
-Power BI connects to Synapse or directly to Delta tables for dashboards and reporting.
+The project is organized into the following modules:
 
-🏅 Medallion Architecture
+```bash
+├── data/                    # Source Netflix datasets (CSV, JSON) used in the project
+├── Databricks notebook/     # PySpark notebooks containing transformation logic and DLT pipeline code
+├── databrick worflow/       # JSON configuration for Databricks Jobs/Workflows to trigger DLT
+├── datafactory/             # Azure Data Factory (ADF) pipeline definitions and orchestration logic
+└── README.md                # Project Documentation
+```
+## 🚀 Key Features
 
-Bronze (Incremental Data) → Raw, append-only ingestion.
+* ✅ Declarative ETL: Uses Delta Live Tables to manage dependencies and data flow automatically.
+* ✅ Real-Time Data Quality: Automated constraints ensure the Netflix catalog data is accurate and consistent.
+* ✅ Hybrid Orchestration: Combines Azure Data Factory for external file detection with Databricks Workflows for internal processing.
+* ✅ Warehouse-Grade Analytics: Enables enterprise-scale SQL reporting via Synapse Analytics without duplicating data.
+* ✅ CI/CD Integrated: Modular structure allows for easy deployment via GitHub Actions or Azure DevOps.
 
-Silver (Transformation) → Cleansed and conformed data.
+## 🛠️ Technology Stack
 
-Gold (Star Schema) → Aggregated, analytics-ready datasets.
-
-🚀 Features
-
-✅ Real-time and incremental data ingestion
-
-✅ Fully automated pipelines with Delta Live Tables
-
-✅ End-to-end orchestration with Azure Data Factory
-
-✅ Warehouse-ready tables for Synapse Analytics
-
-✅ Self-service BI with Power BI
-
-✅ GitHub integration for CI/CD
-
-HiGH LEVEL DESIGN
-
-![screenshot](https://github.com/Sharmaaditya22/Azure-Netflix-Project/blob/10dc5a00ee7d7a5261c23916bada5791e37491eb/Azure_Netflix_project_flow.png)
+| Category | Technology Used |
+| :--- | :--- |
+| **Cloud Provider** | Microsoft Azure |
+| **Compute & ETL** | Azure Databricks (Spark / PySpark) |
+| **Orchestration** | Delta Live Tables (DLT), Azure Data Factory (ADF) |
+| **Storage** | ADLS Gen2, Delta Lake |
+| **Warehousing** | Azure Synapse Analytics (Serverless SQL) |
+| **Visualization** | Microsoft Power BI |
